@@ -1,22 +1,26 @@
 {
   "database": {
     "schema": {
-      "cliptrot_posts_v2": {
+      "cliptrot_pfps": {
+        "id": { "type": "uuid", "description": "User ID, primary key." },
+        "pfp_url": { "type": "text", "description": "URL of the user's custom PFP." }
+      },
+      "cliptrot_posts": {
+        "id": { "type": "uuid", "description": "Unique ID for the post.", "primary_key": true },
         "caption": { "type": "text" },
         "media_url": { "type": "text" },
-        "media_type": { "type": "text" }
+        "media_type": { "type": "text", "description": "'image' or 'video'" },
+        "user_id": { "type": "uuid", "description": "ID of the user who created the post." }
       },
-      "cliptrot_hooves_v2": {
-        "id": { "type": "text", "description": "Primary key: user_id-post_id" },
+      "cliptrot_hooves": {
+        "id": { "type": "text", "description": "Composite key: user_id-post_id", "primary_key": true },
+        "user_id": { "type": "uuid" },
         "post_id": { "type": "uuid" }
       },
-      "cliptrot_follows_v2": {
-        "id": { "type": "text", "description": "Primary key: follower_id-following_id" },
+      "cliptrot_follows": {
+        "id": { "type": "text", "description": "Composite key: follower_id-following_id", "primary_key": true },
+        "follower_id": { "type": "uuid" },
         "following_id": { "type": "uuid" }
-      },
-      "cliptrot_profiles_v1": {
-        "id": { "type": "uuid", "description": "Primary key: user_id" },
-        "pfp_url": { "type": "text" }
       }
     }
   }
