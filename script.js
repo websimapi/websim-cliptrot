@@ -35,7 +35,6 @@ function usePeers() {
         (callback) => {
             // Presence subscription is a proxy for peer list changes.
             const unsubscribe = room.subscribePresence(callback);
-            callback(); // initial call
             return unsubscribe;
         },
         () => room.peers || {}
