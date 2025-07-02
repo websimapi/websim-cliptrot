@@ -1,0 +1,342 @@
+/* General Styles */
+:root {
+    --primary-color: #8E44AD; /* A nice purple */
+    --secondary-color: #9B59B6;
+    --background-color: #F4F0F6; /* Light lavender */
+    --surface-color: #FFFFFF;
+    --text-color: #333333;
+    --hoof-color: #E91E63; /* Pink for hooves */
+    --font-main: 'Poppins', sans-serif;
+    --font-logo: 'Paytone One', sans-serif;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header */
+.header {
+    background-color: var(--surface-color);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #EAEAEA;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin-bottom: 1.5rem;
+}
+
+.logo {
+    font-family: var(--font-logo);
+    font-size: 2rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin: 0 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav a:hover, .nav a.active {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.profile-nav img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--primary-color);
+}
+
+/* Post Form */
+.post-form {
+    background: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.post-form h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+.post-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #DDD;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    box-sizing: border-box;
+    min-height: 80px;
+    margin-bottom: 1rem;
+}
+
+.post-form input[type="file"] {
+    margin-bottom: 1rem;
+}
+
+.post-form button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.post-form button:hover {
+    background-color: var(--secondary-color);
+}
+.post-form button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+
+/* Feed & Posts */
+.feed {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.post {
+    background: var(--surface-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+}
+
+.post-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+}
+
+.post-header a {
+    font-weight: 600;
+    color: var(--text-color);
+    text-decoration: none;
+}
+.post-header a:hover {
+    text-decoration: underline;
+}
+
+.post-media {
+    width: 100%;
+    max-height: 700px;
+    object-fit: cover;
+}
+
+.post-content {
+    padding: 1rem;
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hoof-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #CCC;
+    transition: all 0.2s ease;
+}
+
+.hoof-button.hoofed {
+    color: var(--hoof-color);
+    transform: scale(1.1);
+}
+
+.hoof-button:hover {
+    transform: scale(1.2);
+}
+
+.post-caption {
+    line-height: 1.5;
+}
+
+.post-caption strong {
+    margin-right: 0.5rem;
+}
+
+/* Profile Page */
+.profile-header {
+    background: var(--surface-color);
+    padding: 2rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-header img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--primary-color);
+}
+
+.profile-info h1 {
+    margin: 0 0 0.5rem 0;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1.5rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.follow-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.unfollow-button {
+    background-color: #EAEAEA;
+    color: #333;
+}
+
+/* PFP Generator */
+.pfp-generator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.pfp-modal {
+    background: var(--surface-color);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.pfp-modal h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+.pfp-modal textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #DDD;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    min-height: 60px;
+    margin-bottom: 1rem;
+}
+
+.pfp-modal button {
+     background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0.5rem;
+}
+
+.pfp-modal button.secondary {
+    background-color: #6c757d;
+}
+
+.pfp-modal button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.pfp-result img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+/* Loading/Empty States */
+.loading, .empty-feed {
+    text-align: center;
+    padding: 4rem 0;
+    color: #888;
+    font-size: 1.2rem;
+}
+
+/* Utilities */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border-left-color: var(--primary-color);
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
