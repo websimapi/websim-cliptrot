@@ -76,6 +76,46 @@ body {
     border: 2px solid var(--primary-color);
 }
 
+/* Active Users Bar */
+.active-users-bar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 8px 1rem;
+    background-color: #e9d8f3;
+    border-bottom: 1px solid #d1b3e3;
+    min-height: 53px;
+    gap: 0.5rem;
+}
+
+.active-users-bar .active-users-list {
+    display: flex;
+    padding-left: 15px; /* for overlap */
+}
+
+.active-users-bar .user-avatar {
+    margin-left: -15px;
+    transition: transform 0.2s ease;
+}
+.active-users-bar .user-avatar:hover {
+    transform: translateY(-2px);
+    z-index: 5;
+}
+
+.active-users-bar .user-avatar img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid var(--surface-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.active-users-bar .label {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
 /* Bottom Nav */
 .bottom-nav {
     display: none; /* Hidden by default */
@@ -356,9 +396,6 @@ body {
     padding: 4rem 0;
     color: #888;
     font-size: 1.2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 /* Utilities */
