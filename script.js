@@ -4,6 +4,10 @@ const { createRoot } = ReactDOM;
 const room = new WebsimSocket();
 room.initialize(); // Initialize for real-time features
 
+// --- Stable subscribers and getters for useSyncExternalStore ---
+const subscribeToPeers = (callback) => room.subscribePresence(callback);
+const getPeersSnapshot = () => room.peers || {};
+
 // --- Collections ---
 const usersCollection = room.collection('cliptrot_users_v2');
 const postsCollection = room.collection('cliptrot_posts_v1');
@@ -32,15 +36,14 @@ function useUserPfp(username) {
 
 function usePeers() {
     const peers = useSyncExternalStore(
-        (callback) => {
-            // Presence subscription is a proxy for peer list changes.
-            const unsubscribe = room.subscribePresence(callback);
-            return unsubscribe;
-        },
-        () => room.peers || {}
+        subscribeToPeers,
+        getPeersSnapshot
     );
-    // Sort peers by username for a consistent order
-    return Object.values(peers).sort((a, b) => a.username.localeCompare(b.username));
+    // Sort peers by username for a consistent order, and memoize the result
+    // to avoid creating new array references on every render if not necessary.
+    return useMemo(() => {
+        return Object.values(peers).sort((a, b) => a.username.localeCompare(b.username));
+    }, [peers]);
 }
 
 // --- Components ---
