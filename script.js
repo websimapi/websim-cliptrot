@@ -31,9 +31,14 @@ function useUserPfp(username) {
 
 function usePeers() {
     const peers = useSyncExternalStore(
-        room.subscribePresence,
-        () => room.peers,
-        () => room.peers
+        useCallback((callback) => {
+            if (room.subscribePresence) {
+                return room.subscribePresence(callback);
+            }
+            return () => {}; // Return empty unsubscribe function
+        }, []),
+        () => room.peers || {},
+        () => room.peers || {}
     );
     return useMemo(() => (peers ? Object.values(peers) : []), [peers]);
 }
