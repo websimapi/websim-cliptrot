@@ -25,7 +25,7 @@ function useUserPfp(user) {
   const { data: profileData } = useQuery(
     user ? profilesCollection.filter({ id: user.id }) : null
   );
-  const profile = Array.isArray(profileData) ? profileData[0] : profileData;
+  const profile = profileData?.[0];
   const customPfp = profile?.pfp_url;
   const defaultPfp = user ? `https://images.websim.com/avatar/${user.username}` : "pony-logo.png";
   return customPfp || defaultPfp;
