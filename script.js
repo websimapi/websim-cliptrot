@@ -30,17 +30,26 @@ function useUserPfp(username) {
 }
 
 function usePeers() {
-    const peers = useSyncExternalStore(
-        useCallback((callback) => {
-            if (room.subscribePresence) {
-                return room.subscribePresence(callback);
-            }
-            return () => {}; // Return empty unsubscribe function
-        }, []),
-        () => room.peers || {},
-        () => room.peers || {}
-    );
-    return useMemo(() => (peers ? Object.values(peers) : []), [peers]);
+    const [peers, setPeers] = useState([]);
+    
+    useEffect(() => {
+        const updatePeers = () => {
+            setPeers(room.peers ? Object.values(room.peers) : []);
+        };
+        
+        // Initial load
+        updatePeers();
+        
+        // Subscribe to presence changes
+        let unsubscribe = () => {};
+        if (room.subscribePresence) {
+            unsubscribe = room.subscribePresence(updatePeers);
+        }
+        
+        return unsubscribe;
+    }, []);
+    
+    return peers;
 }
 
 
