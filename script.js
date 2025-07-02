@@ -31,12 +31,8 @@ function useUserPfp(username) {
 
 function usePeers() {
     const peers = useSyncExternalStore(
-        (callback) => {
-            const unsub = room.subscribePresence(callback);
-            // also need to call it once after init is done.
-            room.initialize().then(callback);
-            return unsub;
-        },
+        room.subscribePresence,
+        () => room.peers,
         () => room.peers
     );
     return useMemo(() => (peers ? Object.values(peers) : []), [peers]);
