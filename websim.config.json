@@ -1,0 +1,24 @@
+{
+  "database": {
+    "schema": {
+      "cliptrot_posts_v2": {
+        "caption": { "type": "text" },
+        "media_url": { "type": "text" },
+        "media_type": { "type": "text" }
+      },
+      "cliptrot_hooves_v2": {
+        "id": { "type": "text", "description": "Primary key: user_id-post_id" },
+        "post_id": { "type": "uuid" }
+      },
+      "cliptrot_follows_v2": {
+        "id": { "type": "text", "description": "Primary key: follower_id-following_id" },
+        "following_id": { "type": "uuid" }
+      },
+      "cliptrot_profiles_v1": {
+        "id": { "type": "uuid", "description": "Primary key: user_id" },
+        "pfp_url": { "type": "text" }
+      }
+    }
+  }
+}
+
