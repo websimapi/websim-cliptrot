@@ -2,11 +2,6 @@ const { useState, useEffect, useMemo, useSyncExternalStore, useCallback } = Reac
 const { createRoot } = ReactDOM;
 
 const room = new WebsimSocket();
-room.initialize(); // Initialize for real-time features
-
-// --- Stable subscribers and getters for useSyncExternalStore ---
-const subscribeToPeers = (callback) => room.subscribePresence(callback);
-const getPeersSnapshot = () => room.peers || {};
 
 // --- Collections ---
 const usersCollection = room.collection('cliptrot_users_v2');
@@ -36,15 +31,17 @@ function useUserPfp(username) {
 
 function usePeers() {
     const peers = useSyncExternalStore(
-        subscribeToPeers,
-        getPeersSnapshot
+        (callback) => {
+            const unsub = room.subscribePresence(callback);
+            // also need to call it once after init is done.
+            room.initialize().then(callback);
+            return unsub;
+        },
+        () => room.peers
     );
-    // Sort peers by username for a consistent order, and memoize the result
-    // to avoid creating new array references on every render if not necessary.
-    return useMemo(() => {
-        return Object.values(peers).sort((a, b) => a.username.localeCompare(b.username));
-    }, [peers]);
+    return useMemo(() => (peers ? Object.values(peers) : []), [peers]);
 }
+
 
 // --- Components ---
 
@@ -57,6 +54,11 @@ function App() {
         const handleHashChange = () => setRoute(window.location.hash || '#/');
         window.addEventListener('hashchange', handleHashChange);
         return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
+
+    useEffect(() => {
+        // Initialize the room connection once.
+        room.initialize();
     }, []);
 
     let pageContent;
@@ -72,13 +74,38 @@ function App() {
     return (
         <div>
             <Header currentUser={currentUser} activeRoute={route} onPfpClick={() => setIsPfpModalOpen(true)} />
-            <ActiveUsers />
+            <ActiveUsersBar />
             <main>
                 {pageContent}
             </main>
             {isPfpModalOpen && <PfpGenerator currentUser={currentUser} onClose={() => setIsPfpModalOpen(false)} />}
             {currentUser && <BottomNav activeRoute={route} currentUser={currentUser} />}
         </div>
+    );
+}
+
+function ActiveUsersBar() {
+    const peers = usePeers();
+
+    if (peers.length <= 1) { // Only show if there's more than one person
+        return null;
+    }
+
+    return (
+        <div className="active-users-bar">
+            {peers.map(peer => (
+                <ActiveUser key={peer.id} peer={peer} />
+            ))}
+        </div>
+    );
+}
+
+function ActiveUser({ peer }) {
+    const pfp = useUserPfp(peer.username);
+    return (
+        <a href={`#/profile/${peer.username}`} className="active-user-avatar" title={peer.username}>
+            <img src={pfp} alt={peer.username} />
+        </a>
     );
 }
 
@@ -106,38 +133,6 @@ function Header({ currentUser, activeRoute, onPfpClick }) {
                 ) : <div style={{width: '45px', height: '45px'}}></div>}
             </div>
         </header>
-    );
-}
-
-function ActiveUsers() {
-    const peers = usePeers();
-
-    if (peers.length === 0) {
-        return (
-             <div className="active-users-bar">
-                 <span className="label">Connecting...</span>
-            </div>
-        );
-    }
-
-    return (
-        <div className="active-users-bar">
-            <span className="label">Online ({peers.length}):</span>
-            <div className="active-users-list">
-                {peers.map(peer => (
-                    <ActiveUserAvatar key={peer.id} username={peer.username} />
-                ))}
-            </div>
-        </div>
-    );
-}
-
-function ActiveUserAvatar({ username }) {
-    const pfp = useUserPfp(username);
-    return (
-        <a href={`#/profile/${username}`} title={username} className="user-avatar">
-            <img src={pfp} alt={username} />
-        </a>
     );
 }
 
@@ -224,6 +219,7 @@ function ProfilePage({ username, currentUser }) {
     );
 }
 
+
 function ProfileHeader({ username, followingCount, followersCount, currentUser, isOwnProfile }) {
     const pfp = useUserPfp(username);
     const follows = useSyncExternalStore(followsCollection.subscribe, followsCollection.getList) || [];
@@ -271,6 +267,7 @@ function ProfileHeader({ username, followingCount, followersCount, currentUser, 
         </div>
     );
 }
+
 
 function PostForm({ currentUser }) {
     const [caption, setCaption] = useState('');
