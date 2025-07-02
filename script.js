@@ -60,6 +60,7 @@ function App() {
                 {pageContent}
             </main>
             {isPfpModalOpen && <PfpGenerator currentUser={currentUser} onClose={() => setIsPfpModalOpen(false)} />}
+            {currentUser && <BottomNav activeRoute={route} currentUser={currentUser} />}
         </div>
     );
 }
@@ -88,6 +89,29 @@ function Header({ currentUser, activeRoute, onPfpClick }) {
                 ) : <div style={{width: '45px', height: '45px'}}></div>}
             </div>
         </header>
+    );
+}
+
+function BottomNav({ activeRoute, currentUser }) {
+    if (!currentUser) return null;
+    
+    const isProfileActive = activeRoute === `#/profile/${currentUser.username}`;
+    
+    return (
+        <nav className="bottom-nav">
+            <a href="#/" className={`bottom-nav-link ${activeRoute === '#/' ? 'active' : ''}`}>
+                <i className="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#/following" className={`bottom-nav-link ${activeRoute === '#/following' ? 'active' : ''}`}>
+                <i className="fa-solid fa-users"></i>
+                <span>Following</span>
+            </a>
+            <a href={`#/profile/${currentUser.username}`} className={`bottom-nav-link ${isProfileActive ? 'active' : ''}`}>
+                 <i className="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
     );
 }
 
@@ -230,6 +254,13 @@ function PostForm({ currentUser }) {
         }
     };
 
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+        }
+    }
+
     return (
         <form className="post-form" onSubmit={handleSubmit}>
             <h2>Create a new post</h2>
@@ -239,13 +270,20 @@ function PostForm({ currentUser }) {
                 onChange={(e) => setCaption(e.target.value)}
                 required
             />
-            <input
-                type="file"
-                accept="image/*,video/*"
-                onChange={(e) => setFile(e.target.files[0])}
-                required
-            />
-            <button type="submit" disabled={isUploading || !file || !caption}>
+            <div style={{display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                <label className="file-input-wrapper">
+                    <i className="fa-solid fa-cloud-arrow-up"></i> Choose Media
+                    <input
+                        type="file"
+                        accept="image/*,video/*"
+                        onChange={handleFileChange}
+                        required
+                    />
+                </label>
+                 {file && <span className="file-name">{file.name}</span>}
+            </div>
+            
+            <button type="submit" disabled={isUploading || !file || !caption} style={{marginTop: '1rem'}}>
                 {isUploading ? 'Posting...' : 'Post to ClipTrot'}
             </button>
         </form>
@@ -409,4 +447,3 @@ function PfpGenerator({ currentUser, onClose }) {
 
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);
-
